@@ -1,0 +1,95 @@
+body {
+    background-image: url("../img/Background.png");
+    z-index: -1;
+    font-family: 'Roboto'
+}
+
+h2 {
+    text-align: center;
+    font-size: 44px;
+    margin-top: 0;
+}
+
+h3 {
+    text-align: center;
+    font-size: 34px;
+    margin-top: 0;
+}
+
+ /* Rectangle 1 */
+.main {
+    position: absolute;
+    height: 627px;
+    left: 11.04%;
+    right: 11.11%;
+    top: 86px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.34);
+    border-radius: 8px;
+}
+
+.nav-img {
+    padding-top: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+/* base logo */
+.main-img {
+    padding-top: 90px;
+    display:block;
+    margin:auto;
+}
+
+.text {
+    margin:auto;
+    text-align: center;
+    left: 50%; 
+}
+
+.button-black {
+    background-color: #000000;
+    border: none;
+    color: white;
+    padding: 10px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+
+  }
+
+.button-white {
+    background-color: white;
+    border: none;
+    color: black;
+    padding: 8px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border: 2px solid #000000;
+ 
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+/* Create two equal columns that floats next to each other */
+.column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+ }
+  
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}

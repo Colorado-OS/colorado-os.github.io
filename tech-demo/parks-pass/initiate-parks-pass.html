@@ -1,0 +1,172 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="apple-touch-icon" sizes="57x57" href="../img/favicon/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="../img/favicon/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="../img/favicon/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="../img/favicon/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="../img/favicon/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="../img/favicon/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="../img/favicon/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="../img/favicon/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../img/favicon/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="../img/favicon/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="../img/favicon/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../img/favicon/favicon-16x16.png">
+  <link rel="manifest" href="../img/favicon/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="../img/favicon/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+  <title>Colorado OS - Parks Pass Application</title>
+  <meta name="description" content="Digital Signature Exchange Interface">
+
+  <link rel="stylesheet" href="../css/styles.css?v=1.0">
+
+</head>
+<!-- example layout taken from https://codepen.io/hunterlong/pen/gWMJww -->
+<body>
+  <div class="title">
+    <h2>Digital Parks Pass Application</h2>
+  </div>
+  <div id="web3-warning" class="hidden warning">
+    Make sure the example app is being served with an HTTP server. <br />
+    Please install MetaMask: <a href="https://metamask.io/">https://metamask.io/</a>
+  </div>
+  <div class="info">
+      <label>Name: </label>&nbsp;<input id="applicant-name" type="text" value="Fooberry S Barston" />
+      <br />
+      <br />
+      <label>ID Type: 
+        <select name="id" id="id">
+          <option value="drivers-license">Drivers License</option>
+          <option value="passport">Passport</option>
+          <option value="state-id">State ID</option>
+        </select>
+      <br />
+      <br />
+      <label>ID #: </label>&nbsp;<input id="applicant-id-number" type="text" value="02-42424242" />
+      <br />
+      <br />
+      <label>Pass Type: 
+      <select name="pass" id="pass">
+        <option value="family-annual">Family Annual</option>
+        <option value="vehicle-annual">Vehicle Annual</option>
+        <option value="aspen-leaf-annual">Aspen Leaf Annual</option>
+      </select>
+      </label>
+  </div>
+ <br />
+    <div class="ethpayment">
+
+        <div class="ethpaymentbar"></div>
+        
+        <img src="https://chart.apis.google.com/chart?cht=qr&chs=500x500&chl=ethereum:pay-0x8e9d312F6E0B3F511bb435AC289F2Fd6cf1F9C81@4?value=1e17&chld=H">
+        <!--
+        <span class="ethitem">
+            Digital Parks Pass Application 
+        </span>
+      -->
+        <span class="ethdescription">
+            Please send application fee to initiate the application process
+        </span>
+    
+        <span class="ethusdamount">
+          <span id="pick">.01</span><b> ETH</b>
+        </span>
+      <!--
+      <span class="ethusdamount">
+             $160 <b>USD</b>
+      </span>
+      -->
+        <input class="ethaddress" value="0x8e9d312F6E0B3F511bb435AC289F2Fd6cf1F9C81" readonly>
+    
+      <span class="ethpaymentdesc">
+        Send ETH<br />
+        <input id="send" type="submit" value="Send ETH" />
+      </span>
+
+    
+      <span class="ethpaymentstatus">
+        <a href="./state-parks-pass-sig.html">>>>Step 2: State Parks Pass Signature Interface</a> 
+      </span>
+  
+</div>
+
+
+</body>
+</html>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.2.6/dist/web3.min.js"></script>
+
+<script type="text/javascript">
+ window.addEventListener('load', (event) => {
+    let web3;
+    const web3Warning = document.getElementById('web3-warning');
+
+    if (typeof window.ethereum === 'undefined') {
+      console.error('Client does not have an active Web3 provider or the example app is not being run from an HTTP server.');
+      console.log('Go here to install MetaMask: https://metamask.io/');
+      alert(
+        'You need a Web3 provider to run this page. ' + 
+        'Go here to install MetaMask:\n\n' +
+        'https://metamask.io/'
+      );
+      web3Warning.classList.remove('hidden');
+    } else {
+      main();
+    }
+
+    async function main() {
+      web3 = new Web3(window.ethereum);
+      const stateAddress = '0x8e9d312F6E0B3F511bb435AC289F2Fd6cf1F9C81';
+      const accounts = await window.ethereum.enable();
+      const applicantAccount = accounts[0];
+      const element = document.getElementById("pass");
+      let eth_price = ".01"
+      
+      element.addEventListener("change", (e) => {
+        const value = e.target.value;
+        const text = element.options[element.selectedIndex].text;
+            
+        if (value) {
+          if (value == "family-annual") {
+            eth_price = ".01";
+          } 
+          if (value == "vehicle-annual") {
+            eth_price = ".012";
+          } 
+          if (value == "aspen-leaf-annual") {
+            eth_price = ".013";
+          } 
+           if (value == "empty") {
+             eth_price = ".01"
+           }
+
+          document.getElementById("pick").textContent = `${eth_price}`;
+        } else {
+          document.getElementById("pick").textContent = "";
+        }
+       }); // change event listener 
+    
+       send.onclick = async () => {
+        const fee = web3.utils.toWei(eth_price, 'ether');
+        console.log
+        // using the event emitter
+        web3.eth.sendTransaction({
+            from: applicantAccount,
+            to: stateAddress,
+            value: web3.utils.toHex(fee)
+        })
+        .on('confirmation', function(confirmationNumber, receipt){ console.log('confirmed', receipt)})
+        .on('error', console.error); // If a out of gas error, the second parameter is the receipt.
+     
+      };
+
+    } // main 
+  });
+
+
+</script>
